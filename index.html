@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>F1 Japón Live 2026</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b0f19;
+color:white;
+text-align:center;
+}
+
+header{
+background:#e10600;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+}
+
+.card{
+background:#141b2d;
+margin:10px;
+padding:15px;
+border-radius:12px;
+}
+
+button{
+background:#e10600;
+border:none;
+color:white;
+padding:10px 15px;
+border-radius:8px;
+font-size:16px;
+}
+
+iframe{
+width:100%;
+height:320px;
+border:none;
+border-radius:10px;
+}
+
+.timer{
+color:#00ffcc;
+font-size:20px;
+}
+
+.install{
+background:#00aa00;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🏎️ F1 Japón Live 🇯🇵
+</header>
+
+<div class="card">
+<h2>GP Japón 27-29 Marzo</h2>
+<p id="countdown" class="timer"></p>
+</div>
+
+<div class="card">
+<h3>📺 Canales</h3>
+
+<button onclick="loadStream('https://www.formula1.com/en/f1-live.html')">
+F1 Live
+</button>
+
+<button onclick="loadStream('https://fod.fujitv.co.jp/')">
+FOD Japón
+</button>
+
+<button onclick="loadStream('https://www.fujitv.co.jp/')">
+Fuji TV
+</button>
+
+</div>
+
+<div class="card">
+<h3>Reproductor</h3>
+<iframe id="player"></iframe>
+</div>
+
+<div class="card">
+<button class="install" id="installBtn">
+Instalar App
+</button>
+</div>
+
+<script>
+
+function loadStream(url){
+document.getElementById("player").src=url;
+}
+
+var raceDate = new Date("March 29, 2026 14:00:00 GMT+0900");
+
+setInterval(function(){
+
+var now = new Date();
+var diff = raceDate - now;
+
+var d = Math.floor(diff/(1000*60*60*24));
+var h = Math.floor(diff/(1000*60*60)%24);
+var m = Math.floor(diff/(1000*60)%60);
+
+document.getElementById("countdown").innerHTML =
+"Faltan "+d+"d "+h+"h "+m+"m";
+
+},1000);
+
+// PWA
+
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('service-worker.js');
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+e.preventDefault();
+deferredPrompt = e;
+});
+
+document.getElementById("installBtn").onclick = async ()=>{
+if(deferredPrompt){
+deferredPrompt.prompt();
+}
+};
+
+</script>
+
+</body>
+</html>
